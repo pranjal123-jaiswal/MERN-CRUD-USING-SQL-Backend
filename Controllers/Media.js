@@ -2,7 +2,7 @@ const {connection} = require("../db/config")
 
  const addMedia = async(req , resp) => {
     try {
-        console.log("req.body" , req.body)
+        // console.log("req.body" , req.body)
         const {   media_id , productId , mediaUrl   } = req.body;
         // Ensure required fields are present
         if ( !media_id || !productId || !mediaUrl ) {

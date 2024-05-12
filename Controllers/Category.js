@@ -22,10 +22,10 @@ const {connection} = require("../db/config")
               connection.rollback();
               return resp.status(500).send("Error adding product");
           } else {
-              console.log("Product inserted successfully");
+              console.log("Category inserted successfully");
               // Commit the transaction after successful insertion
               connection.commit();
-              resp.send("Product added successfully");
+              resp.send("Category added successfully");
           }
       });
   
@@ -49,8 +49,8 @@ const getCategory = async (req, resp) => {
 
       // Execute SQL query to fetch categories with pagination
       const query = `SELECT * FROM category LIMIT ? OFFSET ?`;
-      console.log("SQL Query:", query);
-      console.log("Parameters:", [limit, skip]);
+    //   console.log("SQL Query:", query);
+    //   console.log("Parameters:", [limit, skip]);
       
       await connection.query(query, [limit, skip], (err, results, fields) => {
           if (err) {
@@ -111,8 +111,6 @@ const getCategory = async (req, resp) => {
       ) AS subquery
   GROUP BY 
       category_name;`;
-    //   console.log("SQL Query:", query);
-    //   console.log("Parameters:", [limit, skip]);
       
       await connection.query(query, (err, results, fields) => {
           if (err) {
@@ -134,45 +132,6 @@ const getCategory = async (req, resp) => {
               }
           }
       });
-
-
-        // await connection.beginTransaction();
-    
-        // // SQL Query to fetch category-wise highest price and product count within specified price ranges
-        // const query = `
-        //   SELECT 
-        //       c.category_name,
-        //       p.category_id,
-        //       MAX(p.price) AS max_price,
-        //       COUNT(*) AS product_count,
-        //       CASE
-        //           WHEN p.price BETWEEN 0 AND 500 THEN '0-500'
-        //           WHEN p.price BETWEEN 501 AND 1000 THEN '501-1000'
-        //           ELSE '1000+'
-        //       END AS price_range
-        //   FROM 
-        //       products p
-        //   JOIN
-        //       categories c ON p.category_id = c.category_id
-        //   GROUP BY 
-        //       p.category_id,
-        //       c.category_name,
-        //       CASE
-        //           WHEN p.price BETWEEN 0 AND 500 THEN '0-500'
-        //           WHEN p.price BETWEEN 501 AND 1000 THEN '501-1000'
-        //           ELSE '1000+'
-        //       END;
-        // `;
-    
-        // const [results] = await connection.query(query);
-    
-        // await connection.commit();
-    
-        // if (results.length > 0) {
-        //   res.send(results);
-        // } else {
-        //   res.send({ result: "No Product found" });
-        // }
       } catch (error) {
         await connection.rollback();
         console.error("Error:", error);

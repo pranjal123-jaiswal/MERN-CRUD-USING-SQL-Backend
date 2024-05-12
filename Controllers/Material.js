@@ -2,7 +2,7 @@ const {connection} = require("../db/config")
 
  const addMaterial = async(req , resp) => {
     try {
-        console.log("req.body" , req.body)
+        // console.log("req.body" , req.body)
         const {   materialId , material_name   } = req.body;
         // Ensure required fields are present
         if ( !materialId || !material_name ) {

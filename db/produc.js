@@ -1,11 +1,11 @@
-const mongoose = require("mongoose")
+// const mongoose = require("mongoose")
 
-const productSchema = new mongoose.Schema({
-    name : String,
-    price: String,
-    category: String,
-    userId: String,
-    company: String
-})
+// const productSchema = new mongoose.Schema({
+//     name : String,
+//     price: String,
+//     category: String,
+//     userId: String,
+//     company: String
+// })
 
-module.exports = mongoose.model("Products" , productSchema)
+// module.exports = mongoose.model("Products" , productSchema)

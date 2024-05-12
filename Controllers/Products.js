@@ -2,7 +2,7 @@ const {connection} = require("../db/config")
 
  const addProduct = async (req, resp) => {
     try {
-      console.log("req.body" , req.body)
+      // console.log("req.body" , req.body)
       const { productName, productId, sku, price,  categoryId , materialId   } = req.body;
       // Ensure required fields are present
       if (!productName || !productId || !sku || !price  || !categoryId || !materialId ) {
@@ -38,14 +38,6 @@ const {connection} = require("../db/config")
     console.error("Error adding product:", error);
     resp.status(500).send("Internal server error");
 }
-      // const product = new Product(req.body); // Create a new User instance
-      // const result = await product.save(); // Save the new user
-      // // result = result.toObject();
-      // // delete result.password
-      // resp.send(result);
-    // } catch (error) {
-    //   resp.status(500).send(error);
-    // } 
   }
 
  const getProducts = async(req, resp) => {
@@ -63,8 +55,6 @@ const {connection} = require("../db/config")
     INNER JOIN category c ON p.category_id = c.category_id
     INNER JOIN material m ON FIND_IN_SET(m.material_id, p.material_ids)
     LIMIT ? OFFSET ?`;
-    // console.log("SQL Query:", query);
-    // console.log("Parameters:", [limit, skip]);
     
     await connection.query(query, [limit, skip], (err, results, fields) => {
         if (err) {
@@ -82,7 +72,7 @@ const {connection} = require("../db/config")
               console.log("Results:", results);
                 resp.send(results);
             } else {
-                resp.send({ result: "No Category found" });
+                resp.send({ result: "No Product found" });
             }
         }
     });
@@ -145,6 +135,7 @@ const {connection} = require("../db/config")
         if (!id) {
           return resp.status(400).send("Missing required fields");
         }
+        let parsedId = parseInt(id)
 
         await connection.beginTransaction();
 
@@ -165,7 +156,7 @@ const {connection} = require("../db/config")
     // console.log("SQL Query:", query);
     // console.log("Parameters:", [limit, skip]);
     
-    await connection.query(query, [id , 1], (err, results, fields) => {
+    await connection.query(query, [parsedId , 1], (err, results, fields) => {
         if (err) {
             // Rollback the transaction in case of an error
             connection.rollback();
@@ -181,22 +172,11 @@ const {connection} = require("../db/config")
               console.log("Results:", results);
                 resp.send(results);
             } else {
-                resp.send({ result: "No Category found" });
+                resp.send({ result: "No Product found" });
             }
         }
     });
-    
-        // await connection.beginTransaction();
-    
-        // const productInsertResult = await connection.query('SELECT * FROM product WHERE product_id = ? LIMIT 1', [id]); // Corrected SQL query
-    
-        // await connection.commit();
-    
-        // if (productInsertResult.length > 0) {
-        //   resp.send(productInsertResult);
-        // } else {
-        //   resp.send({ result: "No Product found" });
-        // }
+
       } catch (error) {
         await connection.rollback();
         resp.status(500).send(error);
@@ -242,21 +222,6 @@ const {connection} = require("../db/config")
               }
           }
       });
-    
-        // Update the product using a parameterized query to prevent SQL injection
-        // const updateResult = await connection.query(
-        //   'UPDATE product SET product_name = ?, SKU = ?, price = ?, category_id = ?, material_ids = ? WHERE product_id = ?',
-        //   [product_name, SKU, price, category_id, material_ids, parsedId]
-        // );
-    
-        // await connection.commit();
-    
-        // if (updateResult.affectedRows > 0) {
-        //   // If any rows were affected, send a success message
-        //   resp.send({ message: "Product updated successfully" });
-        // } else {
-        //   resp.status(404).send({ message: "No product found with the provided ID" });
-        // }
       } catch (error) {
         await connection.rollback();
         console.error("Error updating product:", error);
@@ -290,7 +255,7 @@ const {connection} = require("../db/config")
                 console.log("Results:", results);
                   resp.send(results);
               } else {
-                  resp.send({ result: "No Category found" });
+                  resp.send({ result: "No Products found" });
               }
           }
       });
@@ -356,7 +321,7 @@ const {connection} = require("../db/config")
                     console.log("Results:", results);
                     resp.send(results);
                 } else {
-                    resp.send({ result: "No Category found" });
+                    resp.send({ result: "No Product found" });
                 }
             }
         });
